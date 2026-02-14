@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>For My Babylove 💙</title>
+
+<!-- PIXEL FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+
+/* BACKGROUND */
+body{
+  margin:0;
+  font-family:'Press Start 2P', cursive;
+
+  /* New background image */
+  background: url("https://i.pinimg.com/1200x/bf/97/c1/bf97c16704567d42c616d2fd6a376072.jpg") no-repeat center center fixed;
+  background-size: cover;
+
+  text-align:center;
+  overflow-x:hidden;
+}
+
+/* FLOATING HEARTS */
+body::before{
+content:"🩷";
+position:fixed;
+font-size:30px;
+animation:float 10s linear infinite;
+opacity:0.4;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh)}
+100%{transform:translateY(-100vh)}
+}
+
+/* GAMEBOX */
+.gamebox{
+width:380px;
+margin:80px auto;
+padding:25px;
+border:8px solid black;
+background:white;
+box-shadow:10px 10px black;
+}
+
+/* HEART BUTTON */
+.heart{
+font-size:120px;
+cursor:pointer;
+transition:0.3s;
+}
+.heart:hover{transform:scale(1.2)}
+
+/* HIDDEN */
+.hidden{display:none}
+
+/* POKEMON TEXTBOX */
+.textbox{
+border:5px solid black;
+padding:20px;
+margin-top:15px;
+height:140px;
+overflow-y:auto;
+text-align:left;
+line-height:1.6;       /* optional: make spacing tighter */
+white-space:pre-line;
+font-size:12px;        /* smaller, Game Boy style */
+}
+
+/* IMAGE */
+img{
+width:220px;
+border-radius:15px;
+margin-top:20px;
+border:4px solid black;
+}
+
+/* LETTER */
+.letter{
+font-size:60px;
+cursor:pointer;
+margin-top:20px;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+border:8px solid black;
+padding:25px;
+width:300px;
+z-index:10;
+}
+
+/* SHAKE ERROR */
+.shake{
+animation:shake 0.3s;
+}
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-5px)}
+50%{transform:translateX(5px)}
+75%{transform:translateX(-5px)}
+100%{transform:translateX(0)}
+}
+
+/* KUROMI */
+.kuromi{
+width:80px;
+position:absolute;
+top:10px;
+right:10px;
+}
+
+/* PHOTO CONTAINER - GAME BOY STYLE */
+.photo-box{
+  width:220px;           /* narrower width */
+  height:350px;          /* taller height for portrait */
+  margin:20px auto;
+  border:8px solid black;
+  background:linear-gradient(135deg,#ffc0cb,#ffd6e7);
+  border-radius:12px;
+  box-shadow:5px 5px black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
+/* PHOTO ITSELF */
+.photo{
+  width:200px;          /* smaller so it fits inside the frame */
+  height:auto;           /* keeps the original aspect ratio */
+  border-radius:10px;
+  border:3px solid black;
+}
+
+/* OPTIONAL KUROMI OVERLAY */
+.photo-overlay{
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<img src="https://i.pinimg.com/736x/4b/55/54/4b55541d1d5f8a0e9a4a9a79243ee687.jpg" class="kuromi">
+
+<!-- START -->
+<div id="start" class="gamebox">
+  <img src="https://i.pinimg.com/736x/61/a2/31/61a23165a7bac11f39e279031b35fc8f.jpg" class="heart" onclick="showPassword()">
+  <p>PRESS HEART</p>
+</div>
+
+<!-- PASSWORD -->
+<div id="passwordScreen" class="gamebox hidden">
+<h3>INPUT PASSWORD</h3>
+<p style="font-size:10px">Hint: My favorite to hear from you</p>
+<input id="pass">
+<br><br>
+<button onclick="checkPass()">ENTER</button>
+</div>
+
+<!-- MAIN -->
+<div id="main" class="gamebox hidden">
+
+  <div class="textbox" id="typing"></div>
+
+  <div class="photo-box">
+    <img src="IMG_9029.jpg" class="photo">
+  </div>
+
+  <div class="letter" onclick="showPoem()">🔘</div>
+
+</div>
+
+<!-- POEM POPUP -->
+<div id="poemPopup" class="popup hidden">
+  <h4>For You 💙</h4>
+
+  <!-- Poem as PNG -->
+  <img src="eherm.png" style="width:100%; margin-top:10px; border:4px solid black; border-radius:10px;">
+
+  <br><br>
+  <button onclick="closePoem()">Close</button>
+</div>
+
+<audio id="music" src="bg.mp3" loop></audio>
+
+<script>
+
+/* SHOW PASSWORD */
+function showPassword(){
+document.getElementById("start").style.display="none"
+document.getElementById("passwordScreen").style.display="block"
+}
+
+/* PASSWORD CHECK */
+function checkPass(){
+
+let correct="hmp!"  // CHANGE PASSWORD HERE
+let input=document.getElementById("pass")
+let screen=document.getElementById("passwordScreen")
+
+if(input.value.toLowerCase()===correct){
+
+screen.style.display="none"
+document.getElementById("main").style.display="block"
+
+startTyping()
+document.getElementById("music").play()
+
+}else{
+screen.classList.add("shake")
+setTimeout(()=>screen.classList.remove("shake"),300)
+}
+}
+
+/* GAME TYPE TEXT */
+let message=`Happy Valentine's Day, my khaleesi 💙
+
+Thank you for always choosing to stay with me, even after all the fights and misunderstandings we had 💙.
+
+See you very soon 💙 I love you!`
+
+let i=0
+
+function startTyping(){
+
+let speed=35
+
+function type(){
+if(i<message.length){
+document.getElementById("typing").innerHTML+=message.charAt(i)
+i++
+setTimeout(type,speed)
+}
+}
+type()
+}
+
+/* POEM POPUP */
+function showPoem(){
+document.getElementById("poemPopup").classList.remove("hidden")
+}
+
+function closePoem(){
+document.getElementById("poemPopup").classList.add("hidden")
+}
+
+</script>
+
+</body>
+</html>
